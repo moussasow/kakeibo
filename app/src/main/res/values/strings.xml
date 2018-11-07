@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">家計簿</string>
+    <string name="fragment_shopping_list_text">買物リスト画面</string>
+
+    <!-- MainFragment-->
+    <string name="fragment_main_btn_show">買物リスト表示</string>
+    <string name="fragment_main_text_label">メイン画面</string>
+
+</resources>
