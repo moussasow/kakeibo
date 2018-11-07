@@ -45,4 +45,9 @@ public class MainFragment extends BaseFragment {
         // ShoppingListFragmentを表示
         activity.replaceFragment(ShoppingListFragment.newInstance());
     }
+
+    @OnClick(R.id.fragment_main_btn_add)
+    void onAddClick() {
+
+    }
 }
