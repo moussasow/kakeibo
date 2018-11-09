@@ -8,3 +8,8 @@
 /build
 /captures
 .externalNativeBuild
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
