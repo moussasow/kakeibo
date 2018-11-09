@@ -37,12 +37,13 @@ public class MainFragment extends BaseFragment {
 
     @OnClick(R.id.fragment_main_btn_shopping_list)
     void btnShoppingClick() {
-        final BaseActivity activity = obtainBaseActivity();
-        if (activity == null) {
-            return;
-        }
-
         // ShoppingListFragmentを表示
-        activity.replaceFragment(ShoppingListFragment.newInstance());
+        navigateToFragment(ShoppingListFragment.newInstance());
+    }
+
+    @OnClick(R.id.fragment_main_btn_add)
+    void onAddClick() {
+        // 入力フラグメントへ遷移
+        navigateToFragment(InputFragment.newInstance());
     }
 }
