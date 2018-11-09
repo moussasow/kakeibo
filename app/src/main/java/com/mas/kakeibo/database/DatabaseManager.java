@@ -26,6 +26,18 @@ public class DatabaseManager {
         mDatabase = mDatabaseHelper.getWritableDatabase();
     }
 
+    /**
+     * データベースにレコードを追加
+     *
+     * @param productName 商品名
+     * @param productCategory 商品の種類
+     * @param price 値段
+     * @param shopName 店舗名
+     * @param shopAddress 店舗の住所
+     * @param purchaseDate 購入日付
+     * @param imageLocation 画像パース
+     * @return
+     */
     public boolean addEntry(String productName,
                             String productCategory,
                             int price,
@@ -46,6 +58,11 @@ public class DatabaseManager {
         return mDatabase.insert(DatabaseHelper.DB_TABLE, null, values) != -1;
     }
 
+    /**
+     * データベースのすべてのレコードを読み取る
+     *
+     * @return レコードのcursor
+     */
     public Cursor retrieveAllEntries() {
         return mDatabase.rawQuery("SELECT * FROM " + DatabaseHelper.DB_TABLE, null);
     }
