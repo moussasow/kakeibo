@@ -15,7 +15,8 @@ public class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.base_activity);
 
         // アプリ起動後、メインフラグメントを表示
-        addFragment(MainFragment.newInstance());
+        String date = "10月23日";
+        addFragment(MainFragment.newInstance(date));
     }
 
     /**
