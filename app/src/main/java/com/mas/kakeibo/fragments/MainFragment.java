@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.mas.kakeibo.R;
 import com.mas.kakeibo.activities.BaseActivity;
+import com.mas.kakeibo.utils.LogUtil;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,9 +18,14 @@ import butterknife.OnClick;
  * Created by sow.m on 2018/11/06.
  */
 public class MainFragment extends BaseFragment {
+    private static final String TAG = MainFragment.class.getSimpleName();
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static MainFragment newInstance(String date) {
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putString("date", date);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
@@ -33,6 +39,11 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            String date = args.getString("date");
+            LogUtil.debug(TAG, "渡された日付:" + date);
+        }
     }
 
     @OnClick(R.id.fragment_main_btn_shopping_list)
