@@ -4,14 +4,22 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mas.kakeibo.R;
+import com.mas.kakeibo.constants.Common;
 import com.mas.kakeibo.database.DatabaseManager;
 import com.mas.kakeibo.utils.LogUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +38,17 @@ public class InputFragment extends BaseFragment {
     @BindView(R.id.input)
     TextView mInput;
 
+    @BindView(R.id.fragment_input_product_name)
+    EditText mEditProductName;
+    @BindView(R.id.fragment_input_product_category)
+    EditText mEditProductCategory;
+    @BindView(R.id.fragment_input_product_price)
+    EditText mEditProductPrice;
+    @BindView(R.id.fragment_input_shop_name)
+    EditText mEditShopName;
+    @BindView(R.id.fragment_input_shop_address)
+    EditText mEditProductShopAddress;
+
     private DatabaseManager mDatabaseManager;
 
     @Nullable
@@ -45,19 +64,82 @@ public class InputFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         LogUtil.debug(TAG, "onActivityCreated");
         mDatabaseManager = DatabaseManager.getInstance(getActivity());
-        addDummyData();
     }
 
-    private void addDummyData() {
 
-        mDatabaseManager.addEntry("ミルク",
-                "食べ物",
-                200,
-                "セブンイレブン",
-                "新宿３丁目",
-                "11月9日",
-                "img.png");
+    @OnClick(R.id.fragment_input_register)
+    void onRegisterClick() {
+        addToDatabase();
     }
+
+    private void addToDatabase() {
+        final String productName = mEditProductName.getText().toString();
+        final String productCategory = mEditProductCategory.getText().toString();
+        final String productPrice = mEditProductPrice.getText().toString();
+        final String shopName = mEditShopName.getText().toString();
+        final String shopAddress = mEditProductShopAddress.getText().toString();
+
+        if (!isValidInput(productName, productCategory, productPrice, shopName, shopAddress)) {
+            return;
+        }
+
+        // FIXME とりあえず　日付を今日にする
+        final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        mDatabaseManager.addEntry(productName,
+                productCategory,
+                Integer.parseInt(productPrice),
+                shopName,
+                shopAddress,
+                date,
+                "NA");
+
+    }
+
+    private boolean isValidInput(String name, String category, String price, String shop, String address) {
+        if (TextUtils.isEmpty(name)) {
+            showError("商品名");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(category)) {
+            showError("商品種類");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(price)) {
+            showError("値段");
+            return false;
+        }
+
+        if (!price.matches(Common.REGEX_NUMBER)) {
+            showError("数字");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(shop)) {
+            showError("店舗名");
+            return false;
+        }
+
+        if (TextUtils.isEmpty(address)) {
+            showError("店舗住所");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showError(String type) {
+        final View view = getView();
+        if (view == null || TextUtils.isEmpty(type)) {
+            return;
+        }
+
+        final String message = String.format(getString(R.string.fragment_input_error) , type);
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
+    }
+
 
     @OnClick(R.id.show)
     void onShowClick() {
