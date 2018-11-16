@@ -6,4 +6,7 @@
     <string name="fragment_main_btn_show">買物リスト表示</string>
     <string name="fragment_main_text_label">メイン画面</string>
 
+    <!-- InputFragment -->
+    <string name="fragment_input_error">%sを入力して下さい</string>
+
 </resources>
