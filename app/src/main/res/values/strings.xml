@@ -8,5 +8,6 @@
 
     <!-- InputFragment -->
     <string name="fragment_input_error">%sを入力して下さい</string>
+    <string name="fragment_input_date_format">%1$d年%2$d月%3$d日</string>
 
 </resources>

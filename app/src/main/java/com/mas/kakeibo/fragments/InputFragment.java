@@ -1,20 +1,27 @@
 package com.mas.kakeibo.fragments;
 
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mas.kakeibo.R;
 import com.mas.kakeibo.constants.Common;
 import com.mas.kakeibo.database.DatabaseManager;
+import com.mas.kakeibo.dialogs.ProductDatePicker;
+import com.mas.kakeibo.events.DatePickerEvent;
 import com.mas.kakeibo.utils.LogUtil;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +55,8 @@ public class InputFragment extends BaseFragment {
     EditText mEditShopName;
     @BindView(R.id.fragment_input_shop_address)
     EditText mEditProductShopAddress;
+    @BindView(R.id.fragment_input_date)
+    TextView mTextPurchaseDate;
 
     private DatabaseManager mDatabaseManager;
 
@@ -78,13 +87,11 @@ public class InputFragment extends BaseFragment {
         final String productPrice = mEditProductPrice.getText().toString();
         final String shopName = mEditShopName.getText().toString();
         final String shopAddress = mEditProductShopAddress.getText().toString();
+        final String date = mTextPurchaseDate.getText().toString();
 
-        if (!isValidInput(productName, productCategory, productPrice, shopName, shopAddress)) {
+        if (!isValidInput(productName, productCategory, productPrice, shopName, shopAddress, date)) {
             return;
         }
-
-        // FIXME とりあえず　日付を今日にする
-        final String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         mDatabaseManager.addEntry(productName,
                 productCategory,
@@ -96,7 +103,7 @@ public class InputFragment extends BaseFragment {
 
     }
 
-    private boolean isValidInput(String name, String category, String price, String shop, String address) {
+    private boolean isValidInput(String name, String category, String price, String shop, String address, String date) {
         if (TextUtils.isEmpty(name)) {
             showError("商品名");
             return false;
@@ -127,6 +134,11 @@ public class InputFragment extends BaseFragment {
             return false;
         }
 
+        if (TextUtils.isEmpty(date)) {
+            showError("日付");
+            return false;
+        }
+
         return true;
     }
 
@@ -140,6 +152,27 @@ public class InputFragment extends BaseFragment {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 
+
+    @OnClick(R.id.fragment_input_date)
+    void onDateTextClick() {
+        showDatePicker(getFragmentManager());
+    }
+
+    private void showDatePicker(FragmentManager manager) {
+        if (manager == null) {
+            return;
+        }
+
+        AppCompatDialogFragment fragment = new ProductDatePicker();
+        ((ProductDatePicker) fragment).createDateEvent(new DatePickerEvent() {
+            @Override
+            public void onDatePicked(String date) {
+                mTextPurchaseDate.setText(date);
+            }
+        });
+
+        fragment.show(manager, "datePicker");
+    }
 
     @OnClick(R.id.show)
     void onShowClick() {

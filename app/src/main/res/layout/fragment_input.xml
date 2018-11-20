@@ -121,7 +121,8 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -132,11 +133,13 @@
                     android:gravity="end"
                     android:text="日付:" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/fragment_input_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:inputType="text" />
+                    android:padding="5dp"
+                    android:background="@color/light_gray"/>
             </TableRow>
 
         </TableLayout>
