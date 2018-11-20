@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class DatabaseManager {
     private static DatabaseManager mInstance;
-    private DatabaseHelper mDatabaseHelper;
     private SQLiteDatabase mDatabase;
 
     public static synchronized DatabaseManager getInstance(Context context) {
@@ -22,20 +21,20 @@ public class DatabaseManager {
     }
 
     private DatabaseManager(Context context) {
-        mDatabaseHelper = new DatabaseHelper(context);
-        mDatabase = mDatabaseHelper.getWritableDatabase();
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        mDatabase = databaseHelper.getWritableDatabase();
     }
 
     /**
      * データベースにレコードを追加
      *
-     * @param productName 商品名
+     * @param productName     商品名
      * @param productCategory 商品の種類
-     * @param price 値段
-     * @param shopName 店舗名
-     * @param shopAddress 店舗の住所
-     * @param purchaseDate 購入日付
-     * @param imageLocation 画像パース
+     * @param price           値段
+     * @param shopName        店舗名
+     * @param shopAddress     店舗の住所
+     * @param purchaseDate    購入日付
+     * @param imageLocation   画像パース
      * @return
      */
     public boolean addEntry(String productName,
@@ -65,5 +64,19 @@ public class DatabaseManager {
      */
     public Cursor retrieveAllEntries() {
         return mDatabase.rawQuery("SELECT * FROM " + DatabaseHelper.DB_TABLE, null);
+    }
+
+
+    /**
+     * データベースのレコードを日付で絞り込む
+     *
+     * @param date 日付
+     * @return レコードのcursor
+     */
+    public Cursor obtainEntriesByDate(String date) {
+        final String selection = DatabaseHelper.COL_PURCHASE_DATE + "=?";
+        final String[] selectArgs = new String[]{date};
+
+        return mDatabase.query(DatabaseHelper.DB_TABLE, null, selection, selectArgs, null, null, null);
     }
 }

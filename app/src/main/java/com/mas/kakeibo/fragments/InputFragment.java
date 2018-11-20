@@ -1,8 +1,6 @@
 package com.mas.kakeibo.fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,10 +22,6 @@ import com.mas.kakeibo.database.DatabaseManager;
 import com.mas.kakeibo.dialogs.ProductDatePicker;
 import com.mas.kakeibo.events.DatePickerEvent;
 import com.mas.kakeibo.utils.LogUtil;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -150,7 +143,7 @@ public class InputFragment extends BaseFragment {
             return;
         }
 
-        final String message = String.format(getString(R.string.fragment_input_error) , type);
+        final String message = String.format(getString(R.string.fragment_input_error), type);
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 
@@ -217,7 +210,7 @@ public class InputFragment extends BaseFragment {
 
     @OnClick(R.id.show)
     void onShowClick() {
-        Cursor cursor = mDatabaseManager.retrieveAllEntries();
+        Cursor cursor = mDatabaseManager.obtainEntriesByDate(mTextPurchaseDate.getText().toString());
         StringBuilder text = new StringBuilder();
         if (cursor.moveToFirst()) {
             do {

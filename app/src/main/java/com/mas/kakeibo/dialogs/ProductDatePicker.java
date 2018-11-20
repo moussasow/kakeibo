@@ -25,7 +25,7 @@ public class ProductDatePicker extends AppCompatDialogFragment implements DatePi
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH) + 1;
+        int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         return new DatePickerDialog(getActivity(),
@@ -39,7 +39,7 @@ public class ProductDatePicker extends AppCompatDialogFragment implements DatePi
             return;
         }
 
-        final String date = String.format(getString(R.string.fragment_input_date_format), year, month, dayOfMonth);
+        final String date = String.format(getString(R.string.fragment_input_date_format), year, month + 1, dayOfMonth);
         mDatePickerEvent.onDatePicked(date);
     }
 

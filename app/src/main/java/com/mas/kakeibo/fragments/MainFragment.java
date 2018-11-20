@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mas.kakeibo.R;
-import com.mas.kakeibo.activities.BaseActivity;
 import com.mas.kakeibo.utils.LogUtil;
 
 import butterknife.ButterKnife;
