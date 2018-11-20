@@ -1,7 +1,9 @@
 package com.mas.kakeibo.fragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -93,9 +95,9 @@ public class InputFragment extends BaseFragment {
             return;
         }
 
-        mDatabaseManager.addEntry(productName,
+        showInputDialog(productName,
                 productCategory,
-                Integer.parseInt(productPrice),
+                productPrice,
                 shopName,
                 shopAddress,
                 date,
@@ -152,6 +154,45 @@ public class InputFragment extends BaseFragment {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
     }
 
+
+    private void showInputDialog(final String name,
+                                 final String category,
+                                 final String price,
+                                 final String shop,
+                                 final String address,
+                                 final String date,
+                                 final String path) {
+
+        new AlertDialog.Builder(getActivity()).setTitle(getString(R.string.fragment_input_dialog_title))
+                .setMessage(getString(R.string.fragment_input_dialog_message))
+                .setNegativeButton(getString(R.string.fragment_input_dialog_btn_cancel), null)
+                .setPositiveButton(getString(R.string.fragment_input_dialog_btn_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // データベースに登録
+                        mDatabaseManager.addEntry(name,
+                                category,
+                                Integer.parseInt(price),
+                                shop,
+                                address,
+                                date,
+                                path);
+
+                        clearInputFields();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private void clearInputFields() {
+        mEditProductName.setText("");
+        mEditProductCategory.setText("");
+        mEditProductPrice.setText("");
+        mEditShopName.setText("");
+        mEditProductShopAddress.setText("");
+        mTextPurchaseDate.setText("");
+    }
 
     @OnClick(R.id.fragment_input_date)
     void onDateTextClick() {
