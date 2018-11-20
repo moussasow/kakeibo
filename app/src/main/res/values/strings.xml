@@ -8,5 +8,10 @@
 
     <!-- InputFragment -->
     <string name="fragment_input_error">%sを入力して下さい</string>
+    <string name="fragment_input_date_format">%1$d年%2$d月%3$d日</string>
+    <string name="fragment_input_dialog_title">商品登録</string>
+    <string name="fragment_input_dialog_message">この商品を本当に登録しますか</string>
+    <string name="fragment_input_dialog_btn_ok">登録</string>
+    <string name="fragment_input_dialog_btn_cancel">キャンセル</string>
 
 </resources>
