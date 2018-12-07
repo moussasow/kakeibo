@@ -13,6 +13,9 @@ import com.mas.kakeibo.adapters.models.ShoppingModel;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by sow.m on 2018/12/07.
  */
@@ -39,7 +42,14 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final ShoppingModel model = mShoppingList.get(position);
 
+        holder.mTextProductCategory.setText(model.getProductCategory());
         holder.mTextProductName.setText(model.getProductName());
+        holder.mTextPurchaseDate.setText(model.getDate());
+        holder.mTextShopName.setText(model.getShopName());
+        holder.mTextShopAddress.setText(model.getShopAddress());
+
+        String price = String.format("¥%d", model.getProductPrice());
+        holder.mTextPurchasePrice.setText(price);
     }
 
     @Override
@@ -48,12 +58,23 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.adapter_shop_list_product_category)
+        TextView mTextProductCategory;
+        @BindView(R.id.adapter_shop_list_product_name)
         TextView mTextProductName;
+        @BindView(R.id.adapter_shop_list_text_price)
+        TextView mTextPurchasePrice;
+        @BindView(R.id.adapter_shop_list_text_date)
+        TextView mTextPurchaseDate;
+        @BindView(R.id.adapter_shop_list_text_shop_name)
+        TextView mTextShopName;
+        @BindView(R.id.adapter_shop_list_text_shop_address)
+        TextView mTextShopAddress;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
 
-            mTextProductName = itemView.findViewById(R.id.adapter_shop_list_product_name);
         }
     }
 }
