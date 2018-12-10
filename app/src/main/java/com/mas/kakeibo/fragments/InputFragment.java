@@ -1,7 +1,9 @@
 package com.mas.kakeibo.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -54,6 +56,7 @@ public class InputFragment extends BaseFragment {
     TextView mTextPurchaseDate;
 
     private DatabaseManager mDatabaseManager;
+    private String mImageLocation;
 
     @Nullable
     @Override
@@ -94,7 +97,7 @@ public class InputFragment extends BaseFragment {
                 shopName,
                 shopAddress,
                 date,
-                "NA");
+                mImageLocation);
 
     }
 
@@ -210,21 +213,16 @@ public class InputFragment extends BaseFragment {
 
     @OnClick(R.id.show)
     void onShowClick() {
-        Cursor cursor = mDatabaseManager.obtainEntriesByDate(mTextPurchaseDate.getText().toString());
-        StringBuilder text = new StringBuilder();
-        if (cursor.moveToFirst()) {
-            do {
-                text.append(cursor.getString(1) + " ");
-                text.append(cursor.getString(2) + " ");
-                text.append(cursor.getInt(3) + "\n");
-                text.append(cursor.getString(4) + " ");
-                text.append(cursor.getString(5) + " ");
-                text.append(cursor.getString(6) + "\n");
-            } while (cursor.moveToNext());
+        final BaseFragment cameraFragment = CameraFragment.newInstance();
+        cameraFragment.setTargetFragment(this, Common.CAMERA_REQUEST_CODE);
+
+        obtainBaseActivity().replaceFragment(cameraFragment);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Common.CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            mImageLocation = data.getStringExtra(Common.BUNDLE_IMAGE_PATH);
         }
-
-        mInput.setText(text);
-
-        obtainBaseActivity().replaceFragment(new CameraFragment());
     }
 }

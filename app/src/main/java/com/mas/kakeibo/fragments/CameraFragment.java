@@ -1,5 +1,7 @@
 package com.mas.kakeibo.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,12 +12,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mas.kakeibo.R;
+import com.mas.kakeibo.constants.Common;
 import com.mas.kakeibo.managers.PermissionManager;
 import com.mas.kakeibo.utils.LogUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +60,10 @@ import static io.fotoapparat.selector.SensorSensitivitySelectorsKt.highestSensor
  */
 public class CameraFragment extends BaseFragment {
     private static final String TAG = CameraFragment.class.getSimpleName();
+
+    public static CameraFragment newInstance() {
+        return new CameraFragment();
+    }
 
     @BindView(R.id.fragment_camera_view)
     CameraView mCameraView;
@@ -149,25 +158,33 @@ public class CameraFragment extends BaseFragment {
     void onCapturePicture() {
         PhotoResult photoResult = mFotoapparat.takePicture();
 
-        photoResult.saveToFile(new File(
-                obtainBaseActivity().getExternalFilesDir("photos"),
-                "photo.jpg"
-        ));
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String filename = timeStamp + ".jpg";
+
+        File path = new File(obtainBaseActivity().getExternalFilesDir("photos"), filename);
+        final String imageLocation = path.getAbsolutePath();
+        photoResult.saveToFile(path);
+
 
         photoResult
                 .toBitmap(scaled(0.25f))
                 .whenDone(new WhenDoneListener<BitmapPhoto>() {
                     @Override
                     public void whenDone(@Nullable BitmapPhoto bitmapPhoto) {
+                        String imageUrl = "";
                         if (bitmapPhoto == null) {
                             LogUtil.debug(TAG, "Couldn't capture photo.");
-                            return;
+                        } else {
+                            imageUrl = imageLocation;
                         }
 
-                        imageView.setVisibility(View.VISIBLE);
-                        imageView.setImageBitmap(bitmapPhoto.bitmap);
-                        imageView.setRotation(-bitmapPhoto.rotationDegrees);
+                        final Intent intent = new Intent();
+                        intent.putExtra(Common.BUNDLE_IMAGE_PATH, imageUrl);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(),
+                                Activity.RESULT_OK,
+                                intent);
 
+                        getFragmentManager().popBackStackImmediate();
                     }
                 });
     }

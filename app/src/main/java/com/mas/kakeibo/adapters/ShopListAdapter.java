@@ -1,11 +1,16 @@
 package com.mas.kakeibo.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mas.kakeibo.R;
@@ -50,6 +55,19 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
 
         String price = String.format("¥%d", model.getProductPrice());
         holder.mTextPurchasePrice.setText(price);
+
+        String imageUrl = model.getImageUrl();
+        if (TextUtils.isEmpty(imageUrl)) {
+            holder.mImageView.setImageResource(android.R.drawable.ic_menu_gallery);
+        } else {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = BitmapFactory.decodeFile(imageUrl, options);
+            //holder.mImageView.setImageURI(Uri.parse(imageUrl));
+            holder.mImageView.setImageBitmap(bitmap);
+            holder.mImageView.setRotation(90.f);
+        }
+
     }
 
     @Override
@@ -70,6 +88,8 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
         TextView mTextShopName;
         @BindView(R.id.adapter_shop_list_text_shop_address)
         TextView mTextShopAddress;
+        @BindView(R.id.adapter_shop_list_image)
+        ImageView mImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
