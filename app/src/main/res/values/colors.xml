@@ -6,5 +6,8 @@
 
     <color name="black">#000000</color>
     <color name="light_gray">#E0E0E0</color>
+    <color name="bg_shoplist">#AFEEEE</color>
+    <color name="turquoise">#40E0D0</color>
+    <color name="navy">#000080</color>
 
 </resources>
