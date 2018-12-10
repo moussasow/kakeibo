@@ -224,5 +224,7 @@ public class InputFragment extends BaseFragment {
         }
 
         mInput.setText(text);
+
+        obtainBaseActivity().replaceFragment(new CameraFragment());
     }
 }
