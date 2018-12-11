@@ -1,9 +1,6 @@
 package com.mas.kakeibo.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,6 +12,7 @@ import android.widget.TextView;
 
 import com.mas.kakeibo.R;
 import com.mas.kakeibo.adapters.models.ShoppingModel;
+import com.mas.kakeibo.utils.BitmapUtil;
 
 import java.util.List;
 
@@ -60,12 +58,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.ViewHo
         if (TextUtils.isEmpty(imageUrl)) {
             holder.mImageView.setImageResource(android.R.drawable.ic_menu_gallery);
         } else {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(imageUrl, options);
-            //holder.mImageView.setImageURI(Uri.parse(imageUrl));
-            holder.mImageView.setImageBitmap(bitmap);
-            holder.mImageView.setRotation(90.f);
+            BitmapUtil.loadBitmap(imageUrl, holder.mImageView);
         }
 
     }
